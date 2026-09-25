@@ -17,9 +17,10 @@ o komentarzach na listach; nie pamiętam, których sytuacji dotyczy problem"*.
 
 Po dwóch dniach pomiarów na czterech kontach odpowiedź jest taka:
 
-> **Powiadomienia trafiają wyłącznie do właściciela konta i wyłącznie
-> o komentarzach klienta. Pozostali członkowie zespołu nie dostają ich nigdy —
-> w żadnym z trzech scenariuszy opisanych w zadaniu.**
+> **Powiadomienia o komentarzach trafiają wyłącznie do właściciela konta.
+> Pozostali członkowie zespołu nie dostają ich w żadnym z trzech scenariuszy
+> opisanych w zadaniu — z jednym wyjątkiem: gdy autor komentarza jawnie oznaczy
+> kogoś przez `@`, powiadomienie dostaje wtedy wyłącznie ta jedna osoba.**
 
 Wszystkie trzy wymagania produktowe z treści zadania są naruszone:
 
@@ -27,12 +28,14 @@ Wszystkie trzy wymagania produktowe z treści zadania są naruszone:
 |---|---|---|---|---|
 | 1 | klient komentuje **propozycję** | wszyscy członkowie zespołu powiązani z listą | tylko właściciel | 🔴 |
 | 2 | klient komentuje **udostępnioną listę** | wszyscy członkowie zespołu powiązani z listą | tylko właściciel | 🔴 |
-| 3 | członek zespołu komentuje **element listy** | pozostali członkowie zespołu | **nikt** | 🔴 |
+| 3 | członek zespołu komentuje **element listy** | pozostali członkowie zespołu | **tylko osoba oznaczona przez `@`** | 🔴 |
 
-Dlaczego zgłaszający napisał „nie zawsze": jest właścicielem konta i jako jedyny
-cokolwiek dostaje. Z jego perspektywy system działa, a zespół zgłasza mu, że do
-nich nic nie dociera. **Wynik nie zależy od sytuacji, tylko od tego, kto pyta** —
-i dlatego nie da się tego odtworzyć, próbując różnych scenariuszy na własnym koncie.
+Dlaczego zgłaszający napisał „nie zawsze" — są dwa powody i oba zmierzyłem.
+Po pierwsze, jest właścicielem konta i jako jedyny dostaje powiadomienia
+o komentarzach klienta, więc z jego perspektywy system działa. Po drugie, zespół
+**czasem** powiadomienia dostaje: wtedy, gdy ktoś jawnie oznaczy daną osobę
+przez `@`. Bez oznaczenia jest cisza. To właśnie daje nieregularny wzorzec,
+którego nie da się odtworzyć, próbując różnych scenariuszy na własnym koncie.
 
 > **Uwaga o rzetelności raportu.** Jedno ze znalezisk wycofałem w trakcie pracy,
 > po ponownym sprawdzeniu. Opisuję to otwarcie w sekcji 9, razem z tym, co poszło
@@ -111,8 +114,9 @@ konta przy każdym pomiarze**.
 |---|---|---|---|
 | POZ-01 | Klient komentuje **propozycję** wysłaną mailem | Powiadomienie u wszystkich członków zespołu | 🔴 **NIE** — tylko właściciel |
 | POZ-02 | Klient komentuje **udostępnioną listę** (publiczny link) | Powiadomienie u wszystkich członków zespołu | 🔴 **NIE** — tylko właściciel |
-| POZ-03 | Członek zespołu komentuje element listy | Powiadomienie u pozostałych członków | 🔴 **NIE** — u nikogo |
+| POZ-03 | Członek zespołu komentuje element listy **bez oznaczenia** | Powiadomienie u pozostałych członków | 🔴 **NIE** — u nikogo |
 | POZ-04 | Właściciel komentuje element listy | Powiadomienie u pozostałych członków | 🔴 **NIE** — u nikogo |
+| POZ-07 | Członek zespołu komentuje element listy **z oznaczeniem `@`** jednej osoby | Powiadomienie u wszystkich pozostałych członków | 🔴 **NIE** — wyłącznie u osoby oznaczonej |
 | POZ-05 | Kilka komentarzy klienta do różnych produktów tej samej listy | Odbiorca ma dostęp do każdego z nich | 🟡 **CZĘŚCIOWO** — widoczny tylko najnowszy, reszta po kliknięciu w grupę |
 | POZ-06 | Komentarz klienta → wiadomość e-mail | Mail w skrzynce odbiorczej, z poprawną liczbą komentarzy | 🔴 **NIE** — spam + zaniżona liczba |
 
@@ -203,7 +207,7 @@ podstawową funkcję.
 
 ---
 
-### 🔴 A2 — Komentarz członka zespołu nie generuje powiadomienia dla nikogo
+### 🔴 A2 — Komentarz członka zespołu powiadamia wyłącznie osobę oznaczoną przez `@`
 
 **Narusza wymaganie nr 3 z treści zadania.**
 
@@ -212,38 +216,64 @@ podstawową funkcję.
 
 **Kroki odtworzenia**
 
-1. Zespół: właściciel + co najmniej dwóch członków, wszyscy z dostępem do listy.
+1. Zespół: właściciel + co najmniej trzech członków, wszyscy z dostępem do listy.
 2. Zaloguj się jako **członek zespołu** (nie właściciel).
-3. Otwórz dymek komentarzy przy dowolnym produkcie.
-4. Przełącz się na zakładkę **🔒 Prywatne**.
-5. Dodaj komentarz i wyślij.
-6. Odśwież panel powiadomień u właściciela i u pozostałych członków.
+3. Otwórz dymek komentarzy przy dowolnym produkcie, zakładka **🔒 Prywatne**.
+4. Wpisz `@` i wybierz z podpowiedzi **jednego** z pozostałych członków zespołu.
+5. Dopisz treść i wyślij.
+6. Odśwież panel powiadomień u **wszystkich** pozostałych kont.
 
 **Oczekiwany rezultat**
 
 Powiadomienie u wszystkich członków zespołu powiązanych z listą poza autorem.
 
-**Rzeczywisty rezultat**
+**Rzeczywisty rezultat** *(pomiar 25.09, godz. 17:50)*
 
-| Konto | Rola | Panel powiadomień |
+| Konto | Rola w tym zdarzeniu | Panel powiadomień |
 |---|---|---|
-| właściciel | administrator | ❌ bez zmian |
-| członek zespołu nr 2 | członek zespołu | ❌ Powiadomienia **0** |
-| członek zespołu nr 3 | członek zespołu | ❌ Powiadomienia **0** |
 | autorka komentarza | członek zespołu | ✅ poprawnie brak — autor nie jest powiadamiany |
+| **członek oznaczony przez `@`** | członek zespołu | ✅ **„Anna Kowalska oznaczył/a Ciebie w komentarzu"** |
+| członek **nieoznaczony** | członek zespołu | ❌ **Powiadomienia 0** |
+| właściciel listy | administrator | ❌ bez zmian |
 
 Komentarz **zapisał się poprawnie** i jest widoczny w zakładce „Prywatne"
-z właściwym podpisem autora. Problem dotyczy wyłącznie powiadomień.
-Panel właściciela sprawdziłem **dwukrotnie, w odstępie kilku minut** —
-to nie jest opóźnienie.
+z właściwym podpisem autora. Mechanizm oznaczania działa: po wpisaniu `@`
+aplikacja podpowiada wszystkich czterech członków zespołu, a wybrane nazwisko
+zostaje wyróżnione w treści jako osobny element.
+
+**Na czym polega naruszenie**
+
+Wymaganie mówi o **pozostałych członkach zespołu**, czyli w tym przypadku
+o trzech osobach. Powiadomienie dostała **jedna** — i tylko dlatego, że autorka
+ręcznie wskazała ją z listy podpowiedzi. Bez oznaczenia komentarz nie generuje
+powiadomienia dla nikogo (scenariusz POZ-03). Powiadomienie jest też **innego
+typu**: mówi „oznaczył Cię w komentarzu", a nie „dodał komentarz".
+
+Innymi słowy: w aplikacji działa mechanizm **wskazania konkretnej osoby**,
+natomiast mechanizmu **powiadamiania zespołu o nowym komentarzu** nie ma.
+
+> **⭐ To jest najlepsze wyjaśnienie zgłoszenia.** Zespół rzeczywiście „nie
+> zawsze" dostaje powiadomienia — dostaje je dokładnie wtedy, gdy ktoś go
+> oznaczy, i nigdy poza tym. Wynik zależy od tego, czy autor komentarza pamiętał
+> o `@`, a nie od typu komentarza, miejsca czy roli. Dlatego zgłaszający nie
+> potrafił wskazać, „których sytuacji dotyczy problem": z jego perspektywy
+> powiadomienia przychodzą losowo.
 
 **Wpływ na użytkownika**
 
-Cała komunikacja wewnętrzna zespołu jest niema. Członkowie zespołu mogą pisać
-do siebie komentarze, o których nikt się nie dowie, dopóki przypadkiem nie
-otworzy dymka przy konkretnym produkcie.
+Komunikacja wewnętrzna zespołu działa wyłącznie wtedy, gdy autor komentarza
+pamięta o jawnym oznaczeniu odbiorcy. Każdy komentarz napisany bez `@` trafia
+w próżnię — zostanie zauważony dopiero wtedy, gdy ktoś przypadkiem otworzy dymek
+przy tym konkretnym produkcie.
 
 **Priorytet (ocena własna):** wysoki.
+
+**Sugestia naprawy**
+
+Komentarz członka zespołu powinien generować powiadomienie dla wszystkich
+pozostałych osób powiązanych z listą, niezależnie od oznaczeń. Oznaczenie `@`
+powinno pozostać tym, czym jest dzisiaj — dodatkowym wyróżnieniem konkretnej
+osoby, a nie jedynym sposobem dostarczenia powiadomienia.
 
 ---
 
@@ -597,9 +627,11 @@ zmieniają interpretację wymagań:
    mail chodzi raz na godzinę. Zgłoszenie nie precyzuje, gdzie zespół szukał
    powiadomień — a to zmienia ocenę tego, czy „nie zawsze" znaczy „wcale",
    czy „z opóźnieniem".
-5. **Czy oznaczenie `@` w komentarzu zmienia adresata powiadomienia?**
-   Nie zdążyłem tego sprawdzić, a jest to jedyna ścieżka, która mogłaby
-   tłumaczyć, dlaczego powiadomienia czasem docierają do konkretnej osoby.
+5. **Czy oznaczenie `@` ma być jedynym sposobem powiadomienia zespołu?**
+   Zmierzyłem, że komentarz członka zespołu powiadamia wyłącznie osobę oznaczoną
+   przez `@`, a pozostałych nie. Jeśli tak to zostało zaprojektowane, to
+   wymaganie nr 3 jest nieaktualne i powinno mówić o oznaczeniach, a nie
+   o wszystkich członkach zespołu. Jeśli nie — to jest błąd A2.
 6. **Czy grupowanie powiadomień w panelu jest zamierzone w obecnej formie?**
    Grupa daje się rozwinąć, ale nic tego nie sugeruje, a licznik podaje liczbę
    grup zamiast zdarzeń (znalezisko C1).
@@ -628,6 +660,14 @@ w systemie" to dwa różne zdania, a ja zapisałem jedno zamiast drugiego.
 
 Test automatyczny był pierwotnie oparty właśnie na tym znalezisku. Po korekcie
 został przepisany na A1 — błąd poważniejszy i w pełni potwierdzony.
+
+**Ta sama reguła wyłapała drugą nieścisłość.** Znalezisko A2 brzmiało pierwotnie
+„komentarz członka zespołu nie generuje powiadomienia dla nikogo". Zanim oddałem
+zadanie, sprawdziłem jeszcze mechanizm oznaczania `@`, którego wcześniej nie
+testowałem — i okazało się, że oznaczona osoba powiadomienie **dostaje**.
+Zdanie było więc za mocne. Poprawiona wersja jest w sekcji 3 i tłumaczy
+zgłoszenie lepiej niż pierwotna, bo wyjaśnia, skąd bierze się słowo
+„nie zawsze".
 
 ### Pomyłka wyłapana przed zgłoszeniem
 
@@ -667,9 +707,9 @@ jednorazową dla każdego przebiegu.
 
 ### Czego nie przetestowałem
 
-Ról współpracownika i gościa, oznaczeń `@` w komentarzach, powiadomień przy
-wizualizacjach i notatkach, zachowania po odebraniu dostępu w trakcie trwającej
-rozmowy oraz **izolacji między dwoma różnymi klientami tej samej listy**.
+Ról współpracownika i gościa, powiadomień przy wizualizacjach i notatkach,
+zachowania po odebraniu dostępu w trakcie trwającej rozmowy oraz **izolacji
+między dwoma różnymi klientami tej samej listy**.
 Ten ostatni uważam za najważniejszy z nieprzetestowanych — to potencjalny wyciek
 danych między klientami i zrobiłbym go jako pierwszy, mając więcej czasu.
 
