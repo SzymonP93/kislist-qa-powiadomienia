@@ -1,0 +1,21 @@
+# materiały wejściowe zadania i notatki robocze — NIE do publicznego repo
+_brief/
+CLAUDE.md
+
+# sekrety
+.env
+.env.local
+.auth/
+
+# zależności
+node_modules/
+
+# artefakty Playwright
+test-results/
+playwright-report/
+blob-report/
+playwright/.cache/
+
+# system
+.DS_Store
+Thumbs.db

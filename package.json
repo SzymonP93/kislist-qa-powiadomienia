@@ -1,0 +1,19 @@
+{
+  "name": "kislist-qa-powiadomienia",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Test regresyjny powiadomien o komentarzach w KIS List",
+  "scripts": {
+    "test": "playwright test",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "auth": "playwright test --config=playwright.auth.config.ts",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0",
+    "@types/node": "22.20.4",
+    "dotenv": "16.6.1",
+    "typescript": "5.9.3"
+  }
+}
