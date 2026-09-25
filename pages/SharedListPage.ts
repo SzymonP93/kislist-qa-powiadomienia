@@ -25,8 +25,10 @@ export class SharedListPage {
 
     // Pole tresci nie istnieje w DOM od razu - pojawia sie dopiero
     // po kliknieciu "Napisz komentarz". To edytor tekstu (contenteditable),
-    // a "Wpisz treść wiadomości" jest w nim zwyklym akapitem, nie atrybutem
-    // placeholder - dlatego szukamy go po roli "textbox".
+    // a napis "Wpisz treść wiadomości" siedzi w atrybucie data-placeholder
+    // wewnetrznego akapitu i jest tylko dorysowywany przez CSS. Atrybutu
+    // placeholder tam nie ma, wiec getByPlaceholder() nie ma czego znalezc -
+    // dlatego szukamy pola po roli "textbox", podanej wprost w role="textbox".
     await item.getByRole('button', { name: 'Napisz komentarz' }).click()
     await item.getByRole('textbox').fill(text)
     await item.getByRole('button', { name: 'Wyślij', exact: true }).click()
